@@ -44,5 +44,5 @@ class AssignmentGradeSchema(Schema):
     grade = EnumField(GradeEnum, required=True, allow_none=False)
 
     @post_load
-    def initiate_class(self, data_dict, many, partial):\
+    def initiate_class(self, data_dict, many, partial): \
         return GeneralObject(**data_dict)

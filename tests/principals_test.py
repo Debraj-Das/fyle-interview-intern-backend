@@ -11,7 +11,8 @@ def test_get_assignments(client, h_principal):
 
     data = response.json['data']
     for assignment in data:
-        assert assignment['state'] in [AssignmentStateEnum.SUBMITTED, AssignmentStateEnum.GRADED]
+        assert assignment['state'] in [
+            AssignmentStateEnum.SUBMITTED, AssignmentStateEnum.GRADED]
 
 
 def test_grade_assignment_draft_assignment(client, h_principal):
@@ -26,7 +27,6 @@ def test_grade_assignment_draft_assignment(client, h_principal):
         },
         headers=h_principal
     )
-
     assert response.status_code == 400
 
 
@@ -60,3 +60,24 @@ def test_regrade_assignment(client, h_principal):
 
     assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
     assert response.json['data']['grade'] == GradeEnum.B
+
+
+def test_get_teachers(client, h_principal):
+    response = client.get(
+        '/principals/teachers',
+        headers=h_principal
+    )
+
+    assert response.status_code == 200
+
+
+def test_grade_assignment_invalid_grade(client, h_principal):
+    """Only valid grades are A,B,C,D"""
+    response = client.post(
+        '/principal/assignments/grade',
+        json={
+            'id': 4,
+            'grade': 'CF'
+        },
+        headers=h_principal
+    )

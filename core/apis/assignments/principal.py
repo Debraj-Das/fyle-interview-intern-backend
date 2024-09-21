@@ -4,7 +4,6 @@ from core import db
 from core.apis.responses import APIResponse
 from core.models.assignments import Assignment
 from .schema import AssignmentSchema, AssignmentGradeSchema
-from core.libs import assertions
 
 principal_assignments_resources = Blueprint('principal_assignments_resources', __name__)
 
@@ -16,7 +15,6 @@ def list_submitted_graded_assignments(p):
 
     assignments_data = AssignmentSchema().dump(assignments, many=True)
 
-    # Return the list of assignments as a response
     return APIResponse.respond(data=assignments_data)
 
 @principal_assignments_resources.route('/assignments/grade', methods=['POST'], strict_slashes=False)
@@ -33,10 +31,8 @@ def grade_assignment(p, incoming_payload):
         auth_principal=p
     )
 
-    # Commit the grade changes to the database
     db.session.commit()
 
     graded_assignment_dump = AssignmentSchema().dump(graded_assignment)
 
-    # Return the graded assignment details as a response
     return APIResponse.respond(data=graded_assignment_dump)

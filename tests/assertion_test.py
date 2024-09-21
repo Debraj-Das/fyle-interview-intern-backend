@@ -10,6 +10,14 @@ def test_assert_auth():
         assert e.message == 'UNAUTHORIZED'
 
 
+def test_assert_true():
+    try:
+        assertions.assert_true(False)
+    except FyleError as e:
+        assert e.status_code == 403
+        assert e.message == 'FORBIDDEN'
+
+
 def test_assert_valid():
     try:
         assertions.assert_valid(False)
@@ -23,11 +31,3 @@ def test_assert_found():
     except FyleError as e:
         assert e.status_code == 404
         assert e.message == 'NOT_FOUND'
-
-
-def test_assert_true():
-    try:
-        assertions.assert_true(False)
-    except FyleError as e:
-        assert e.status_code == 403
-        assert e.message == 'FORBIDDEN'
